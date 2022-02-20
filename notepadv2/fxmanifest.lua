@@ -7,6 +7,8 @@ files {
     'html/**'
 }
 
+shared_script '@es_extended/imports.lua'
+
 client_scripts {
     'config.lua',
     'client/main.lua',
