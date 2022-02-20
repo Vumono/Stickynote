@@ -1,4 +1,3 @@
-QBCore = exports['qb-core']:GetCoreObject()
 
 local UIOpen = false
 local closeNUI = false
