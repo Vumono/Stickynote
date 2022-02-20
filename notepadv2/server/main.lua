@@ -1,25 +1,23 @@
-QBCore = exports['qb-core']:GetCoreObject()
-
-QBCore.Functions.CreateUseableItem('stickynotepad', function(source, item)
-	local src = source
-	local Player = QBCore.Functions.GetPlayer(src)			
-	local itemData = Player.Functions.GetItemBySlot(item.slot)
-	if itemData.info.text ~= nil then 
-		TriggerClientEvent('stickynotepad:client:showUI', src,  itemData.info.text, item.slot)
-	else
-		TriggerClientEvent('stickynotepad:client:showUI', src, 'Type Here...', item.slot)
+ESX.RegisterUsableItem('stickynote', function(source, item)
+	local xPlayer = ESX.GetPlayerFromId(source)		
+	local itemData = exports.ox_inventory:Search(source, 'slots', item)
+	for _, v in pairs(itemData) do
+		if v.metadata ~= nil then 
+			TriggerClientEvent('stickynotepad:client:showUI', source, v.metadata, v.slot)
+		else
+			TriggerClientEvent('stickynotepad:client:showUI', source, 'Type Here...', v.slot)
+		end
 	end
 end)
 
 RegisterServerEvent("jake:server:stickychange")
 AddEventHandler("jake:server:stickychange", function(text, slot)
-	local src = source
-	local Player = QBCore.Functions.GetPlayer(src)	
-	local stickynote = Player.Functions.GetItemBySlot(slot)
+	local xPlayer = ESX.GetPlayerFromId(source)
+	local stickynote = exports.ox_inventory:GetSlot(source, slot)
 	
-	if Player.Functions.RemoveItem('stickynotepad', 1, slot) then
+	if exports.ox_inventory:RemoveItem(source, 'stickynote', 1, {}, slot) then
 		local info = {}
 		info.text = text
-		Player.Functions.AddItem('stickynotepad', 1, false, info)
+		exports.ox_inventory.AddItem(source, 'stickynote', 1, info, slot)
 	end
 end)
